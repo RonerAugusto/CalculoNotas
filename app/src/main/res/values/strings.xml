@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">CalculoNotas</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_calcular">Calcular</string>
+    <string name="title_activity_tela_reprovada">tela_reprovada</string>
+    <string name="Lbl_Fechar">Fechar</string>
+    <string name="title_activity_tela_aprovado">TelaAprovado</string>
+    <string name="lbl_fechardois">Fechar</string>
+    <string name="title_activity_negociacao">Negociacao</string>
+    <string name="lbl_fechar">Fechar</string>
+    <string name="title_activity_negociacao_tela">Negociacao_tela</string>
+    <string name="title_activity_avaliar">Avaliar</string>
+    <string name="lbl_verificar">Verificar</string>
+    <string name="lbl_Salvar">Salvar</string>
+</resources>
