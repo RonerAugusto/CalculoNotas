@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.*;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +28,7 @@ import  android.database.sqlite.*;
 
 
 
-public class Avaliar extends AppCompatActivity implements View.OnClickListener {
+public class Avaliar extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private EditText edt_nota;
     private Button   btn_verificar;
@@ -45,6 +47,7 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
         spn_materia=(Spinner)findViewById(R.id.spn_materia);
         lst_media=(ListView)findViewById(R.id.lst_media);
         txt_nota=(TextView)findViewById(R.id.txt_nota);
+        lst_media.setOnItemClickListener(this);
 
         btn_verificar.setOnClickListener(this);
 
@@ -68,21 +72,32 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
         adp_opcoes.add("Eletrônica Digital");
         adp_opcoes.add("Eletrônica Analogica");
         adp_opcoes.add("Sistemas   Lineares");
+        adp_opcoes.add("Inteligência Artificial");
+        adp_opcoes.add("Resistência dos materiais");
+        adp_opcoes.add("Eletrônica de Potência");
+        adp_opcoes.add("Microcontroladores");
 
+
+        //banco de dados
         try
-        { database=new DataBase(this);
+            {
+                database=new DataBase(this); //cria o banco
 
-            conn=database.getWritableDatabase();
+                conn=database.getWritableDatabase();//conecta com o banco
 
-            persistencia= new Persistencia(conn);
-
-
-           lst_media.setAdapter(persistencia.lista_notas(this));
+                persistencia= new Persistencia(conn); //metodo da classe persistencia
 
 
 
 
-        }catch (SQLException e){
+
+                lst_media.setAdapter(persistencia.lista_notas(this));
+
+
+
+            }
+        catch (SQLException e)
+        {
 
             AlertDialog.Builder  alert= new AlertDialog.Builder(this);
             alert.setMessage("erro ao conectar no banco" + e.getMessage());
@@ -105,21 +120,59 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-         @Override
+
+         public void calcular ()
+
+
+         {
+
+             Calculo_nota calculo=new Calculo_nota();
+
+             calculo.setV1(Double.parseDouble(edt_nota.getText().toString()));
+
+             NumberFormat format = NumberFormat.getInstance();
+             format.setMaximumFractionDigits(2);
+             String media = format.format(calculo.restante());
+             // Double media=calculo.restante();
+
+
+             txt_nota.setText(media.toString());
+
+
+
+         }
+
+           public void startint ()
+                   {
+                       Intent inter = new Intent(this, Avaliar.class);
+                       startActivityForResult(inter, 0);
+
+
+                   }
+
+
+                @Override
+                protected void onActivityResult(int requestCode, int resultCode, Intent data)
+                {
+                    persistencia= new Persistencia(conn);
+                    lst_media.setAdapter(persistencia.lista_notas(this));
+
+
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+
+    @Override
          public void onClick(View v)
                 {
 
-                    Calculo_nota calculo=new Calculo_nota();
+                    switch (v.getId())
+                    {
+                        case R.id.btn_verificar:
+                            calcular();
 
-                    calculo.setV1(Double.parseDouble(edt_nota.getText().toString()));
+                            break;
 
-                    NumberFormat format = NumberFormat.getInstance();
-                    format.setMaximumFractionDigits(2);
-                    String media = format.format(calculo.restante());
-                   // Double media=calculo.restante();
-
-
-                    txt_nota.setText(media.toString());
+                    }
 
 
 
@@ -133,7 +186,7 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
                       public boolean onCreateOptionsMenu(Menu menu)
                       {
                           MenuInflater inflater=getMenuInflater();
-                          inflater.inflate(R.menu.menu_avaliar,menu);
+                          inflater.inflate(R.menu.menu_avaliar, menu);
 
 
 
@@ -156,6 +209,7 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
                                   {
 
                                       insert();
+                                      startint();
 
                                   }
 
@@ -181,8 +235,12 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
 
                                      notas = new Notas();
 
+                                    String itemdaspinner = spn_materia.getSelectedItem().toString();
+
                                     notas.setNotas(txt_nota.getText().toString());
-                                    notas.setMaterias(String.valueOf(spn_materia.getSelectedItemPosition()));
+                                    notas.setMaterias(itemdaspinner);
+                                    notas.setPrimeiraNota(Integer.parseInt( edt_nota.getText().toString()));
+
 
                                     persistencia.inserir(notas);
 
@@ -201,6 +259,17 @@ public class Avaliar extends AppCompatActivity implements View.OnClickListener {
                             }
 
 
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+
+                AlertDialog.Builder alert= new AlertDialog.Builder(this);
+                alert.setMessage("Deseja Deletar" );
+               // alert.setPositiveButton("Excluir", new AlertDialog() );
 
 
+                alert.show();
+
+
+            }
 }

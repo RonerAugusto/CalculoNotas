@@ -44,12 +44,14 @@
             android:gravity="right">
 
             <Button
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lbl_verificar"
-                android:background="@color/dim_foreground_disabled_material_light"
+                android:background="@drawable/buttonfocus"
                 android:id="@+id/btn_verificar"
-                android:layout_weight="0.44" />
+                android:layout_weight="0.44"
+                />
 
             <Spinner
                 android:layout_width="match_parent"

@@ -6,12 +6,14 @@ package br.com.inovert.calculonotas.Entidade;
 public class Notas {
 
     public static String ID="_id";
-    public static String NOTAS="NOTASFALTA ";
-    public static String MATERIAS="TIPOMATERIA ";
+    public static String NOTAS="NOTASFALTA";
+    public static String MATERIAS="TIPOMATERIA";
+    public static String PRIMEIRANOTA="PRIMEIRANOTA";
 
     private long id;
     private String notas;
     private String materia;
+    private Integer primeiraNota;
 
 
 
@@ -50,10 +52,17 @@ public class Notas {
     @Override
     public String toString ()
     {
-       return notas+""+materia;
+       return notas+" "+materia+""+primeiraNota;
         
         
     }
 
 
+    public Integer getPrimeiraNota() {
+        return primeiraNota;
+    }
+
+    public void setPrimeiraNota(Integer primeiraNota) {
+        this.primeiraNota = primeiraNota;
+    }
 }

@@ -34,8 +34,10 @@ public class Persistencia {
 
         ContentValues values= new ContentValues();
 
-        values.put("NOTASFALTA",    nota.getNotas()  );
+        values.put("NOTASFALTA",       nota.getNotas()  );
         values.put("TIPOMATERIA",      nota.getMaterias() );
+        values.put("PRIMEIRANOTA",     nota.getPrimeiraNota() );
+
 
         conn.insertOrThrow("NOTABANCO",null,values);
 
@@ -47,16 +49,29 @@ public class Persistencia {
 
     }
 
+
+     public  void excluir ()
+     {
+
+
+
+
+
+
+
+
+     }
+
        public ArrayAdapter<Notas> lista_notas (Context context )
        {
 
-           ArrayAdapter<Notas> adp_notas= new ArrayAdapter<Notas>(context,android.R.layout.simple_list_item_1);
+           ArrayAdapter<Notas> adp_notas= new ArrayAdapter<Notas>(context,android.R.layout.simple_expandable_list_item_1);
 
 
            Cursor cursor=conn.query("NOTABANCO",null,null,null,null,null,null);
 
-              if (cursor.getCount()>0)
-              {
+              if (cursor.getCount() > 0)
+             {
 
 
                   cursor.moveToFirst();
@@ -66,8 +81,12 @@ public class Persistencia {
 
                       Notas pega_notas=new Notas();
 
-                      pega_notas.setNotas(cursor.getString(cursor.getColumnIndex(Notas.NOTAS)));
-                      pega_notas.setMaterias(cursor.getString(cursor.getColumnIndex(Notas.MATERIAS)));
+                      String N1;
+
+
+                      pega_notas.setNotas("Falta= " + cursor.getString(cursor.getColumnIndex(Notas.NOTAS)) + "        ");
+                      pega_notas.setMaterias("Matéria= " + cursor.getString(cursor.getColumnIndex(Notas.MATERIAS)) + "      Nota N1= ");
+                      pega_notas.setPrimeiraNota(+cursor.getInt(cursor.getColumnIndex(Notas.PRIMEIRANOTA)));
 
                       adp_notas.add(pega_notas);
 

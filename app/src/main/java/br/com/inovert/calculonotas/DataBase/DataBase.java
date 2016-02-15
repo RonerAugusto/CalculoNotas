@@ -4,16 +4,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.*;
 
+
 /**
  * Created by roner on 13/08/15.
  */
 public class DataBase extends SQLiteOpenHelper {
 
 
+
+    //contrutor padrao cria o banco novonota
     public DataBase  (Context context)
     {
 
-       super(context,"NOVONOTA",null,8);
+       super(context,"NOVONOTA",null,1);
 
 
     }
